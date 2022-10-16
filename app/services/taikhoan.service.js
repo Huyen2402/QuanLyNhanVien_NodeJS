@@ -36,11 +36,13 @@ class TaiKhoanService {
     });
   }
   async findByNamePass(username, password) {
-    return await this.TK.find(username, password);
-    // return await this.find({
-    //   username: { $regex: new RegExp(username), $options: "i" },
-    //   password:{ $regex: new RegExp(password), $options: "i" },
-    // });
+
+    return await this.TK.findOne({
+ 
+      username: { $regex: new RegExp(username), $options: "i" },
+      password: { $regex: new RegExp(password), $options: "i" },
+    });
+  
   }
   async findById(id) {
     return await this.TK.findOne({

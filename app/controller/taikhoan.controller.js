@@ -165,8 +165,6 @@ exports.login = async(req, res, next) =>{
     // const { username, password} = req.query;
     const taikhoanService = new TaiKhoanService(MongoDB.client);
     const user = await taikhoanService.findByNamePass(username, password);
-   
-    
     if(user == null){
       
         return next(
@@ -175,8 +173,13 @@ exports.login = async(req, res, next) =>{
     }
     try{
         if(user){
-          
+       
             return res.send({ message: "Thành công" });
+        }
+        else{
+            return next(
+                new ApiError(400, "Không tìm thấy user")
+              );
         }
 
     }
