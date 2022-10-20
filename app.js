@@ -6,11 +6,13 @@ const app = express();
 const contactRouter = require("./app/route/contact.route.js");
 const PhongRouter = require("./app/route/phong.route.js");
 const TKRouter = require("./app/route/taikhoan.route.js")
+const CVRoute = require("./app/route/chucvu.route.js")
 app.use(cors());
 app.use(express.json());
 app.use("/api/NhanVien", contactRouter);
 app.use("/api/Phong", PhongRouter);
 app.use("/api/TaiKhoan", TKRouter);
+app.use("/api/ChucVu", CVRoute);
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to contact book application." });
 });

@@ -1,37 +1,32 @@
 const { ObjectId } = require("mongodb") ;
 
-class ContactService {
+class ChucVuService {
   constructor(client) {
-    this.Contact = client.db().collection("NhanVien");
+    this.ChucVu = client.db().collection("ChucVu");
   }
   extractContactData(payload) {
-    const contact = {
+    const chucVu = {
       name: payload.name,
-      email: payload.email,
-      address: payload.address,
-      phone: payload.phone,
-      chucVu: payload.chucVu,
-      phong: payload.phong,
-      favorite: payload.favorite,
+ 
     };
-    Object.keys(contact).forEach(
-      (key) => contact[key] === undefined && delete contact[key]
+    Object.keys(chucVu).forEach(
+      (key) => chucVu[key] === undefined && delete chucVu[key]
     );
-    return contact;
+    return chucVu;
   }
   async create(payload) {
-    const contact = this.extractContactData(payload);
-    const result = await this.Contact.findOneAndUpdate(
-      contact,
+    const chucVu = this.extractContactData(payload);
+    const result = await this.ChucVu.findOneAndUpdate(
+        chucVu,
       {
-        $set: { favorite: contact.favorite === true },
+        $set: { name: chucVu.name},
       },
       { returnDocument: "after", upsert: true }
     );
     return result.value;
   }
   async find(filter) {
-    const cursor = await this.Contact.find(filter);
+    const cursor = await this.ChucVu.find(filter);
     return await cursor.toArray();
   }
   async findByName(name) {
@@ -40,7 +35,7 @@ class ContactService {
     });
   }
   async findById(id) {
-    return await this.Contact.findOne({
+    return await this.ChucVu.findOne({
       _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
     });
   }
@@ -49,7 +44,7 @@ class ContactService {
       _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
     };
     const update = this.extractContactData(payload);
-    const result = await this.Contact.findOneAndUpdate(
+    const result = await this.ChucVu.findOneAndUpdate(
       filter,
       { $set: update },
       { returnDocument: "after" }
@@ -57,7 +52,7 @@ class ContactService {
     return result.value;
   }
   async delete_id(id) {
-    const result = await this.Contact.findOneAndDelete({
+    const result = await this.ChucVu.findOneAndDelete({
       _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
     });
     return result.value;
@@ -66,9 +61,9 @@ class ContactService {
     return await this.find({ favorite: true });
   }
   async deleteAll() {
-    const result = await this.Contact.deleteMany({});
+    const result = await this.ChucVu.deleteMany({});
     return result.deletedCount;
   }
 }
 
-module.exports = ContactService;
+module.exports = ChucVuService;
